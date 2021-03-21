@@ -1,0 +1,107 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model City {
+  id        Int      @id @default(autoincrement())
+  zip       String
+  name      String
+  slug      String
+  latitude  Float
+  longitude Float
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt
+
+  // Region relation
+  department   Department @relation(fields: [departmentId], references: [id])
+  departmentId Int
+
+  // Ratings relation
+  ratings Rating[]
+
+  @@unique([zip, name])
+}
+
+model Department {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  slug      String   @unique
+  code      String   @unique
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt
+
+  // City relation
+  cities City[]
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt
+
+  // Ration relation
+  rating Rating[]
+}
+
+// enum RatingStatus {
+//   PENDING
+//   PROCESSING
+//   ACCEPTED
+//   REFUSED
+// }
+
+model Rating {
+  id        Int      @id @default(autoincrement())
+  pros      String
+  cons      String
+  upvotes   Int
+  downvotes Int
+  // status    RatingStatus
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt
+
+  // User relation
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+
+  // City relation
+  city City @relation(fields: [cityId], references: [id])
+
+  // Categories relation
+  categories RatingCategoriesOnRatings[]
+  cityId     Int
+}
+
+model RatingCategoriesOnRatings {
+  note      Float
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt
+
+  rating           Rating         @relation(fields: [ratingId], references: [id])
+  ratingId         Int
+  ratingCategory   RatingCategory @relation(fields: [ratingCategoryId], references: [id])
+  ratingCategoryId Int
+
+  @@id([ratingId, ratingCategoryId])
+}
+
+model RatingCategory {
+  id          Int    @id @default(autoincrement())
+  name        String @unique
+  slug        String @unique
+  description String @default("")
+
+  createdAt DateTime                    @default(now())
+  updateAt  DateTime                    @updatedAt
+  ratings   RatingCategoriesOnRatings[]
+}
