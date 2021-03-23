@@ -19,6 +19,7 @@ export class AuthService {
 
   async signIn(email: string, clearPassword: string) {
     const { password, ...user } = await this.prisma.user.findUnique({
+      rejectOnNotFound: true,
       where: { email },
     });
 
@@ -31,9 +32,11 @@ export class AuthService {
   async signUp(email: string, clearPassword: string) {
     const password = await hash(clearPassword, 10);
 
-    return this.prisma.user.create({
+    const user = await this.prisma.user.create({
       data: { email, password },
       select: { createdAt: true, email: true, id: true, updateAt: true },
     });
+
+    return { ...user, token: sign({ userId: user.id }, this.hash) };
   }
 }
