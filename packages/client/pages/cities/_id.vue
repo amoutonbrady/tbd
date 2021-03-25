@@ -55,6 +55,23 @@
         <p class="whitespace-pre-wrap">
           <strong>Les - :</strong> {{ rating.cons }}
         </p>
+
+        <div class="flex justify-between items-center">
+          <p class="text-bg-true-gray-600">
+            source: <a :href="rating.source">{{ rating.source }}</a>
+          </p>
+
+          <div>
+            <p>
+              <span class="text-to-blue-600">{{ rating.upvotes }}</span>
+              D'accord
+            </p>
+            <p>
+              <span class="text-to-blue-600">{{ rating.downvotes }}</span> Pas
+              d'accord
+            </p>
+          </div>
+        </div>
       </li>
     </ul>
   </div>

@@ -76,7 +76,8 @@ model Rating {
   userId Int
 
   // City relation
-  city City @relation(fields: [cityId], references: [id])
+  city   City   @relation(fields: [cityId], references: [id])
+  source String @default("internal")
 
   // Categories relation
   categories RatingCategoriesOnRatings[]

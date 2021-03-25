@@ -44,15 +44,15 @@ export class RatingsService {
     const { slug, insee } = await this.cities.findOne({ id });
     const pathname = `${slug}_${insee.replace(/^0+/, '')}`;
     // TODO: Credit source
-    const url = `https://www.ville-ideale.fr/${pathname}`;
+    const source = `https://www.ville-ideale.fr/${pathname}`;
 
     const browser = await chromium.launch();
     const context = await browser.newContext();
     const page = await context.newPage();
 
-    await page.goto(url, { referer: url });
+    await page.goto(source, { referer: source });
 
-    console.log(url);
+    console.log(source);
 
     const data = await page.evaluate(() => {
       const $ratings = document.querySelectorAll('.comm');
@@ -135,6 +135,7 @@ export class RatingsService {
 
     for (const rating of data) {
       const entry = await this.create({
+        source,
         city: { connect: { id } },
         user: { connect: { id: user } },
         ...rating,
