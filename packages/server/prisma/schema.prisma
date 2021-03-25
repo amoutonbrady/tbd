@@ -13,6 +13,7 @@ generator client {
 model City {
   id        Int      @id @default(autoincrement())
   zip       String
+  insee     String
   name      String
   slug      String
   latitude  Float
@@ -50,7 +51,7 @@ model User {
   updateAt  DateTime @updatedAt
 
   // Ration relation
-  rating Rating[]
+  ratings Rating[]
 }
 
 // enum RatingStatus {

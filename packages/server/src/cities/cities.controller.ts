@@ -30,6 +30,7 @@ export class CitiesController {
       latitude: number;
       department: string;
       zip: string;
+      insee: string;
     },
   ) {
     const { department, ...city } = data;
@@ -89,6 +90,7 @@ export class CitiesController {
       latitude: number;
       department: string;
       zip: string;
+      insee: string;
     },
   ) {
     const { department, ...city } = data;

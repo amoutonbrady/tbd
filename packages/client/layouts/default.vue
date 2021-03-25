@@ -49,6 +49,7 @@ import {
   useRouter,
   watch,
 } from '@nuxtjs/composition-api'
+import authMiddleware from '@/middleware/auth'
 import { City } from '../../server/prisma'
 import { useAuth } from '../store/auth'
 
@@ -70,6 +71,7 @@ const debounce = <T extends (...args: any[]) => any>(
 }
 
 export default defineComponent({
+  middleware: [authMiddleware],
   setup() {
     const authStore = useAuth()
     const route = useRoute()

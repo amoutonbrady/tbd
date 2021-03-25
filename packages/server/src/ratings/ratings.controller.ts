@@ -69,8 +69,17 @@ export class RatingsController {
     return ratings;
   }
 
+  @Get('load')
+  @UseGuards(AuthGuard)
+  loadExternalRatings(@Query('city') city: string, @User() user: IUser) {
+    const id = parseInt(city, 10);
+
+    return this.ratingsService.loadExternalRatings(id, user.id);
+  }
+
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
+    console.log(2);
     return this.ratingsService.findOne({ id });
   }
 

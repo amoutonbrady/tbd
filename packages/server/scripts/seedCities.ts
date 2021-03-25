@@ -21,7 +21,8 @@ async function main() {
   const content = readFileSync(file, { encoding: 'utf-8' });
   const cities: City[] = JSON.parse(content);
 
-  console.log(`${cities.length} cities to process`);
+  let i = 0;
+  const total = cities.length;
 
   for (const {
     name,
@@ -29,12 +30,16 @@ async function main() {
     zip_code: zip,
     gps_lat: latitude,
     gps_lng: longitude,
+    insee_code: insee,
   } of cities) {
+    if (!insee || !zip) continue;
+
     const slug = slugify(name);
 
     const city = await client.city.upsert({
       create: {
         name,
+        insee,
         slug,
         latitude,
         longitude,
@@ -43,6 +48,7 @@ async function main() {
       },
       update: {
         name,
+        insee,
         slug,
         latitude,
         longitude,
@@ -52,9 +58,9 @@ async function main() {
       where: { zip_name: { name, zip } },
     });
 
-    const isUpdate = city.createdAt !== city.updateAt;
+    i++;
 
-    console.log(`[${isUpdate ? 'UPDATED' : 'CREATED'}] `, name);
+    console.log(`${i}/${total} - ${city.name}`);
   }
 
   console.log(`Done, bye!`);

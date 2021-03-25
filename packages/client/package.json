@@ -63,6 +63,6 @@
     "stylelint-config-prettier": "^8.0.2",
     "stylelint-config-standard": "^21.0.0",
     "vue": "^2.6.12",
-    "windicss": "^2.5.4"
+    "windicss": "^2.5.5"
   }
 }
